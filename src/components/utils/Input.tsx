@@ -6,7 +6,7 @@ type InputProps = {
 
 }
 
-const CustomInput = ({ name, }: InputProps) => {
+const CustomInput = ({ name }: InputProps) => {
   const [user, setUser] = useState({});
   const [focus, setFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
