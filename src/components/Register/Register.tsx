@@ -21,16 +21,16 @@ const Register = () => {
   const userRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLParagraphElement>(null);
   
-  const [user, setUser] = useState('');
-  const [validName, setValidName] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [validId, setValidId] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
   const [pwd, setPwd] = useState<string>('');
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
 
-  const [matchPwd, setMatchPwd] = useState('');
-  const [validMatch, setValidMatch] = useState(false);
+  const [rePwd, setRePwd] = useState('');
+  const [matchPwd, setMatchPwd] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState('');
@@ -43,67 +43,68 @@ const Register = () => {
   }, [])
 
   useEffect(() => {
-    setValidName(user_regex.test(user));
-  }, [user])
+    setValidId(user_regex.test(userId));
+  }, [userId])
   
   useEffect(() => {
-    const result = user_regex.test(user);
-    setValidName(result);
-  }, [user]);
+    const result = user_regex.test(userId);
+    setValidId(result);
+  }, [userId]);
   
   useEffect(() => {
     setValidPwd(pass_regex.test(pwd));
-    setValidMatch(pwd === matchPwd);
-  }, [pwd, matchPwd])
+    setMatchPwd(pwd === rePwd);
+  }, [pwd, rePwd])
 
   useEffect(() => {
     setErrMsg('');
-  }, [user, pwd, matchPwd])
+  }, [userId, pwd, rePwd])
   
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     
   }
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   // if button enabled with JS hack
-  //   const v1 = user_regex.test(user);
-  //   const v2 = pass_regex.test(pwd);
-  //   if (!v1 || !v2) {
-  //       setErrMsg("Invalid Entry");
-  //       return;
-  //     }
-  //     try {
-  //         const response: AxiosRes = await axios.post(REGISTER_URL,
-  //             JSON.stringify({ user, pwd }),
-  //             {
-  //                 headers: { 'Content-Type': 'application/json' },
-  //                 withCredentials: true
-  //             }
-  //         );
-  //         console.log(response?.data);
-  //         console.log(response?.accessToken);
-  //         console.log(JSON.stringify(response))
-  //         setSuccess(true);
-  //         //clear state and controlled inputs
-  //         //need value attrib on inputs for this
-  //         setUser('');
-  //         setPwd('');
-  //         setMatchPwd('');
-  //     } catch (err) {
-  //         if (!err?.response) {
-  //             setErrMsg('No Server Response');
-  //         } else if (err.response?.status === 409) {
-  //             setErrMsg('Username Taken');
-  //         } else {
-  //             setErrMsg('Registration Failed')
-  //         }
-  //         if(err) {
-  //           errRef.current.focus();
-  //         }
-  //     }
-  // }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // if button enabled with JS hack
+    const v1 = user_regex.test(userId);
+    const v2 = pass_regex.test(pwd);
+    if (!v1 || !v2) {
+        setErrMsg("Invalid Entry");
+        return;
+      }
+      // try {
+      //     const response: AxiosRes = await axios.post(REGISTER_URL,
+      //         JSON.stringify({ userId, pwd }),
+      //         {
+      //             headers: { 'Content-Type': 'application/json' },
+      //             withCredentials: true
+      //         }
+      //     );
+      //     console.log(response?.data);
+      //     console.log(response?.accessToken);
+      //     console.log(JSON.stringify(response))
+      //     setSuccess(true);
+      //     //clear state and controlled inputs
+      //     //need value attrib on inputs for this
+      //     setUserId('');
+      //     setPwd('');
+      //     setRePwd('');
+      // } catch (err) {
+      //     if (!err?.response) {
+      //         setErrMsg('No Server Response');
+      //     } else if (err.response?.status === 409) {
+      //         setErrMsg('Username Taken');
+      //     } else {
+      //         setErrMsg('Registration Failed')
+      //     }
+      //     if(err) {
+      //       errRef.current?.focus();
+      //     }
+      // }
+      setSuccess(true)
+  }
 
 
   return (
@@ -113,33 +114,33 @@ const Register = () => {
           <section>
               <h1>Success!</h1>
               <p>
-                  <a href="#">Sign In</a>
+                  <a href="/">Sign In</a>
               </p>
           </section>
         ) : (
           <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Register</h1>
-            <form onSubmit={submitHandler}>
+            <form onSubmit={handleSubmit}>
               <label htmlFor="username">
                 Username:
-                <AiOutlineCheck className={validName ? "valid" : "hide"}/>
-                <AiOutlineClose className={validName || !user ? "hide" : "invalid"}/>
+                <AiOutlineCheck className={validId ? "valid" : "hide"}/>
+                <AiOutlineClose className={validId || !userId ? "hide" : "invalid"}/>
               </label>
               <input
                 type="text"
                 id="username"
                 ref={userRef}
                 autoComplete="off"
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
+                onChange={(e) => setUserId(e.target.value)}
+                value={userId}
                 required
-                aria-invalid={validName ? "false" : "true"}
+                aria-invalid={validId ? "false" : "true"}
                 aria-describedby="uidnote"
                 onFocus={() => setUserFocus(true)}
                 onBlur={() => setUserFocus(false)}
               />
-              <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
+              <p id="uidnote" className={userFocus && userId && !validId ? "instructions" : "offscreen"}>
                 <AiOutlineInfoCircle />
                 4 to 24 characters.<br />
                 Must begin with a letter.<br />
@@ -173,26 +174,26 @@ const Register = () => {
 
               <label htmlFor="confirm_pwd">
                   Confirm Password:
-                  <AiOutlineCheck className={validMatch && matchPwd ? "valid" : "hide"}/>
-                  <AiOutlineClose className={validMatch || !matchPwd ? "hide" : "invalid"}/>
+                  <AiOutlineCheck className={matchPwd && rePwd ? "valid" : "hide"}/>
+                  <AiOutlineClose className={matchPwd || !rePwd ? "hide" : "invalid"}/>
               </label>
               <input
                 type="password"
                 id="confirm_pwd"
-                onChange={(e) => setMatchPwd(e.target.value)}
-                value={matchPwd}
+                onChange={(e) => setRePwd(e.target.value)}
+                value={rePwd}
                 required
-                aria-invalid={validMatch ? "false" : "true"}
+                aria-invalid={matchPwd ? "false" : "true"}
                 aria-describedby="confirmnote"
                 onFocus={() => setMatchFocus(true)}
                 onBlur={() => setMatchFocus(false)}
               />
-              <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
+              <p id="confirmnote" className={matchFocus && !matchPwd ? "instructions" : "offscreen"}>
                   <AiOutlineInfoCircle />
                   Must match the first password input field.
               </p>
 
-              <button disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
+              <button disabled={!validId || !validPwd || !matchPwd ? true : false}>Sign Up</button>
             </form>
             <p>
                 Already registered?<br />

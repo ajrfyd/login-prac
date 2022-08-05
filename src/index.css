@@ -89,7 +89,8 @@ button {
 
 .offscreen {
   position: absolute;
-  left: -9999px;
+  left: -9999999px;
+  display:none;
 }
 
 .hide {
